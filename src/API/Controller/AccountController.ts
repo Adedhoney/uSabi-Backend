@@ -1,6 +1,7 @@
 import { IBaseRequest, RequestWithUserId } from '../Utilities/Request';
 import { successResponse } from '../Utilities/Response';
 import {
+    GoogleSignInDTO,
     LogInDTO,
     ResetPasswordDTO,
     SignUpDTO,
@@ -44,6 +45,20 @@ export class AccountController {
         }
     };
 
+    googleSignIn: RequestHandler = async (
+        req: IBaseRequest<GoogleSignInDTO>,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const user = await this.service.GoogleSignIn(req.body.data);
+
+            return successResponse(res, 'Successful', { ...user });
+        } catch (err) {
+            next(err);
+        }
+    };
+
     getUser: RequestHandler = async (
         req: Request,
         res: Response,
@@ -64,7 +79,7 @@ export class AccountController {
         next: NextFunction,
     ) => {
         try {
-            const user = await this.service.GetUser(req.params.userId);
+            const user = await this.service.GetUserById(req.params.userId);
 
             return successResponse(res, 'Successful', { user });
         } catch (err) {
@@ -99,20 +114,6 @@ export class AccountController {
                 req.body.data,
                 res.locals.authData.userId,
             );
-
-            return successResponse(res, 'Successful');
-        } catch (err) {
-            next(err);
-        }
-    };
-
-    deleteUser: RequestHandler = async (
-        _: Request,
-        res: Response,
-        next: NextFunction,
-    ) => {
-        try {
-            await this.service.DeleteUser(res.locals.authData.userId);
 
             return successResponse(res, 'Successful');
         } catch (err) {

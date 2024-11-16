@@ -33,24 +33,14 @@ export const getFileRootDir = (dir: string) => {
     return path.join(__dirname, dir);
 };
 
-export const generateAuthToken = (
-    userId: string,
-    username: string,
-    sessionId: string,
-): string => {
-    return jwt.sign(
-        { userId, username, sessionId },
-        config.JWT.secret as jwt.Secret,
-        {
-            expiresIn: '24h',
-        },
-    );
+export const generateAuthToken = (userId: string): string => {
+    return jwt.sign({ userId }, config.JWT.secret as jwt.Secret, {
+        expiresIn: '24h',
+    });
 };
 
 export interface ITokenPayload extends jwt.JwtPayload {
     userId: string;
-    username: string;
-    sessionId: string;
 }
 
 export const verifyAuthToken = (token: string) => {
@@ -59,4 +49,22 @@ export const verifyAuthToken = (token: string) => {
 
 export const getCurrentTimeStamp = () => {
     return Math.floor(+new Date() / 1000);
+};
+
+export const generateRandomOTP = () => {
+    const min = 1000;
+    const max = 9999;
+    return `${Math.floor(Math.random() * (max - min + 1)) + min}`;
+};
+
+export const generateOtpToken = (email: string): string => {
+    return jwt.sign({ email }, config.JWT.secret as jwt.Secret, {
+        expiresIn: 300,
+    });
+};
+
+export const verifyOtpToken = (token: string) => {
+    return jwt.verify(token, config.JWT.secret as jwt.Secret) as {
+        email: string;
+    };
 };

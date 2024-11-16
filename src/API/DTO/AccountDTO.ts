@@ -4,9 +4,11 @@ export interface SignUpDTO {
     email: string;
     firstName: string;
     lastName: string;
-    userName: string;
-    DOB: string;
     password: string;
+}
+
+export interface GoogleSignInDTO {
+    accessToken: string;
 }
 
 export interface LogInDTO {
@@ -35,4 +37,14 @@ export interface VerifyOtpDTO {
 export interface ResetPasswordDTO {
     otpToken: string;
     newPassword: string;
+}
+
+export interface GoogleUserDTO {
+    id: string;
+    email: string;
+    verified_email: boolean;
+    name: string;
+    given_name: string;
+    family_name: string;
+    picture: string;
 }

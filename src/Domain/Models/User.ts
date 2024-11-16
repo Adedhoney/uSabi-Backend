@@ -4,8 +4,6 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
-    userName: string;
-    DOB?: string;
     status: UserAccountStatus;
     password?: string;
     emailVerified: boolean;
