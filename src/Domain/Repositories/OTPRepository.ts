@@ -7,38 +7,35 @@ export interface IOTPRepository {
     useOTP(email: string, otp: string, date: number): Promise<void>;
 }
 
-// export class OTPRepository implements IOTPRepository {
-//     constructor(readonly db: IDatabase) {}
+export class OTPRepository implements IOTPRepository {
+    constructor(readonly db: IDatabase) {}
 
-//     async saveOTP(OTP: OTP): Promise<void> {
-//         await this.db.otp.upsert(
-//             { ...OTP },
-//             { fields: ['otp', 'expiresAt', 'status', 'lastModifiedOn'] },
-//         );
-//     }
+    async saveOTP(otp: OTP): Promise<void> {
+        await this.db.execute(
+            `INSERT INTO otps (email, otp, expiresAt, wrongTrials, status)
+            VALUES (?, ?, ?,0, ?)     
+            ON DUPLICATE KEY UPDATE
+                otp = VALUES(otp),
+                expiresAt = VALUES(expiresAt),
+                status = VALUES(status)`,
+            [otp.email, otp.otp, otp.expiresAt, otp.status],
+        );
+    }
 
-//     async getOTP(email: string, otp: string): Promise<OTP> {
-//         const otpInfo = await this.db.otp.findOne({
-//             where: { email, otp },
-//         });
-//         return otpInfo as OTP;
-//     }
+    async getOTP(email: string, otp: string): Promise<OTP> {
+        const otpInfo = await this.db.execute(
+            `SELECT * FROM otps
+     WHERE email = ? AND otp = ?`,
+            [email, otp],
+        );
+        return otpInfo[0] as OTP;
+    }
 
-//     async addWrongTrial(
-//         email: string,
-//         number: number,
-//         date: number,
-//     ): Promise<void> {
-//         await this.db.otp.update(
-//             { wrongTrials: number, lastModifiedOn: date },
-//             { where: { email } },
-//         );
-//     }
-
-//     async useOTP(email: string, otp: string, date: number): Promise<void> {
-//         await this.db.otp.update(
-//             { otp, status: OTPStatus.USED, lastModifiedOn: date },
-//             { where: { email } },
-//         );
-//     }
-// }
+    async useOTP(email: string, otp: string): Promise<void> {
+        await this.db.execute(
+            `UPDATE otps SET status = ${OTPStatus.USED}
+     WHERE email = ? AND otp = ?`,
+            [email, otp],
+        );
+    }
+}

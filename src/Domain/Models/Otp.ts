@@ -5,8 +5,6 @@ export interface OTP {
     expiresAt: number;
     wrongTrials: number;
     status: OTPStatus;
-    createdOn?: number;
-    lastModifiedOn?: number;
 }
 
 export enum OTPStatus {

@@ -29,6 +29,7 @@ import { IAccountNotification } from 'Handlers/Notification';
 export interface IAccountService {
     SignUp(data: SignUpDTO): Promise<void>;
     LogIn(data: LogInDTO): Promise<LogInResponse>;
+    VerifyEmail(data: VerifyOtpDTO): Promise<LogInResponse>;
     GoogleSignIn(token: GoogleSignInDTO): Promise<LogInResponse>;
     GetUser(authUser: User): Promise<User>;
     GetUserById(userId: string): Promise<User>;
@@ -87,8 +88,6 @@ export class AccountService implements IAccountService {
             expiresAt: date + 1200,
             wrongTrials: 0,
             status: OTPStatus.UNUSED,
-            createdOn: date,
-            lastModifiedOn: date,
         });
         this.acctnotif.verificationEmail(data.email, otp, data.firstName);
 
@@ -227,6 +226,9 @@ export class AccountService implements IAccountService {
         data: VerifyOtpDTO,
     ): Promise<{ token: string; user: User }> {
         const user = await this.acctrepo.getUserByEmail(data.email);
+        if (user.emailVerified) {
+            throw new CustomError('User already verified', 200);
+        }
         const verified = await this.otprepo.getOTP(data.email, data.otp);
 
         const date = getCurrentTimeStamp();
@@ -265,6 +267,7 @@ export class AccountService implements IAccountService {
             password: accountInfo.password,
             emailVerified: accountInfo.emailVerified,
             lastModifiedOn: date,
+            modifiedBy: auth.userId,
         };
         await this.acctrepo.updateUser(newUserInfo);
     }

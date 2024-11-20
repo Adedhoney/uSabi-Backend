@@ -13,12 +13,8 @@ const envs = [
     'JWT_SECRET',
     'SMTP_HOST',
     'SMTP_PORT',
-    'SMTP_USERNAME',
+    'SMTP_EMAIL',
     'SMTP_PASSWORD',
-    'TWILIO_SID',
-    'TWILIO_AUTH_TOKEN',
-    'TWILIO_PHONE',
-    'RABBIT_MQ_URL',
 ];
 
 envs.forEach((value, index) => {
@@ -47,10 +43,4 @@ export default {
         EMAIL: process.env.SMTP_EMAIL as string,
         PASSWORD: process.env.SMTP_PASSWORD as string,
     },
-    TWILIO: {
-        SID: process.env.TWILIO_SID as string,
-        AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN as string,
-        PHONE: process.env.TWILIO_PHONE as string,
-    },
-    RABBIT_MQ_URL: process.env.RABBIT_MQ_URL as string,
 };

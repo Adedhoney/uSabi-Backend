@@ -21,6 +21,12 @@ export default (acctctr: AccountController, authentication: RequestHandler) => {
         Validation(GoogleSignInSchema),
         acctctr.googleSignIn,
     );
+
+    router.post(
+        '/verify-email',
+        Validation(VerifyOtpSchema),
+        acctctr.verifyEmail,
+    );
     router.put(
         '/',
         authentication,

@@ -3,14 +3,14 @@ import { Transporter, createTransport } from 'nodemailer';
 import Twilio from 'twilio';
 
 export class Notification {
-    public async sms(params: SmsParams): Promise<void> {
-        const client = Twilio(config.TWILIO.SID, config.TWILIO.AUTH_TOKEN);
-        await client.messages.create({
-            from: config.TWILIO.PHONE,
-            to: params.to,
-            body: params.message,
-        });
-    }
+    // public async sms(params: SmsParams): Promise<void> {
+    //     const client = Twilio(config.TWILIO.SID, config.TWILIO.AUTH_TOKEN);
+    //     await client.messages.create({
+    //         from: config.TWILIO.PHONE,
+    //         to: params.to,
+    //         body: params.message,
+    //     });
+    // }
 
     public async email(params: MailParams): Promise<void> {
         const mail = new MailService();

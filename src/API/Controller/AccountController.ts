@@ -1,4 +1,4 @@
-import { IBaseRequest, RequestWithUserId } from '../Utilities/Request';
+import { IBaseRequest, RequestWithAuth } from '../Utilities/Request';
 import { successResponse } from '../Utilities/Response';
 import {
     GoogleSignInDTO,
@@ -45,6 +45,20 @@ export class AccountController {
         }
     };
 
+    verifyEmail: RequestHandler = async (
+        req: IBaseRequest<VerifyOtpDTO>,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const user = await this.service.VerifyEmail(req.body.data);
+
+            return successResponse(res, 'Email verified', { ...user });
+        } catch (err) {
+            next(err);
+        }
+    };
+
     googleSignIn: RequestHandler = async (
         req: IBaseRequest<GoogleSignInDTO>,
         res: Response,
@@ -60,12 +74,12 @@ export class AccountController {
     };
 
     getUser: RequestHandler = async (
-        req: Request,
+        req: RequestWithAuth,
         res: Response,
         next: NextFunction,
     ) => {
         try {
-            const user = await this.service.GetUser(res.locals.authData.userId);
+            const user = await this.service.GetUser(req.auth!);
 
             return successResponse(res, 'Successful', { user });
         } catch (err) {
@@ -93,10 +107,7 @@ export class AccountController {
         next: NextFunction,
     ) => {
         try {
-            await this.service.UpdateInfo(
-                req.body.data,
-                res.locals.authData.userId,
-            );
+            await this.service.UpdateInfo(req.body.data, req.auth!);
 
             return successResponse(res, 'Successful');
         } catch (err) {
@@ -110,10 +121,7 @@ export class AccountController {
         next: NextFunction,
     ) => {
         try {
-            await this.service.UpdatePassword(
-                req.body.data,
-                res.locals.authData.userId,
-            );
+            await this.service.UpdatePassword(req.body.data, req.auth!);
 
             return successResponse(res, 'Successful');
         } catch (err) {
