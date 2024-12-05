@@ -33,6 +33,13 @@ export default (acctctr: AccountController, authentication: RequestHandler) => {
         Validation(UpdateInfoSchema),
         acctctr.updateInfo,
     );
+
+    router.put(
+        '/:userId',
+        authentication,
+	acctctr.updateUser,
+    );
+
     router.post(
         '/update-password',
         authentication,
