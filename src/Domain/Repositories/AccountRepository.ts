@@ -11,6 +11,7 @@ export interface IAccountRepository {
     getUsers(): Promise<User[]>;
     // deleteUser(userId: string): Promise<void>;
     updateUser(user: User): Promise<void>;
+    updateUserFields(userId: string, updateData: Partial<User>): Promise<void>;
     updatePassword(
         userId: string,
         password: string,
@@ -100,6 +101,19 @@ export class AccountRepository implements IAccountRepository {
                 user.userId,
             ],
         );
+    }
+
+    async updateUserFields(userId: string, updateData: Partial<User>): Promise<void> {
+	const keys = Object.keys(updateData);
+	const values = Object.values(updateData);
+
+	const setClause = keys.map((key) => `${key} = ?`).join(", ");
+        await this.db.execute(
+            `UPDATE users
+	    SET ${setClause}
+	    WHERE userId = ?`,
+	    [...values, userId]
+	);
     }
 
     async verifyEmail(email: string, date: number): Promise<void> {
