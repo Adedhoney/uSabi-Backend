@@ -35,6 +35,7 @@ export interface IAccountService {
     GetUserById(userId: string): Promise<User>;
     GetUsers(): Promise<User[]>;
     UpdateInfo(data: UpdateInfoDTO, auth: User): Promise<void>;
+    UpdateDetails(data: Partial<User>, auth: User): Promise<void>;
     UpdatePassword(data: UpdatePassWordDTO, auth: User): Promise<void>;
     ForgotPassword(email: string): Promise<void>;
     VerifyOTP(data: VerifyOtpDTO): Promise<{ token: string }>;
@@ -270,6 +271,16 @@ export class AccountService implements IAccountService {
             modifiedBy: auth.userId,
         };
         await this.acctrepo.updateUser(newUserInfo);
+    }
+
+    async UpdateDetails(data: Partial<User>, auth: User): Promise<void> {
+	const userDetails = data;
+
+	if (!userDetails || Object.keys(userDetails).length === 0) {
+            throw new CustomError('No fields provided to update.');
+	}
+
+        await this.acctrepo.updateUserFields(auth.userId, data);
     }
 
     async UpdatePassword(data: UpdatePassWordDTO, auth: User): Promise<void> {
