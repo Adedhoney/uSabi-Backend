@@ -1,4 +1,5 @@
 import { IBaseRequest, RequestWithAuth } from '../Utilities/Request';
+import { User } from '@domain/Models';
 import { successResponse } from '../Utilities/Response';
 import {
     GoogleSignInDTO,
@@ -114,6 +115,23 @@ export class AccountController {
             next(err);
         }
     };
+
+    updateUser: RequestHandler = async (
+        req: IBaseRequest<Partial<User>>,
+	res: Response,
+	next: NextFunction,
+    ) => {
+        try {
+            await this.service.UpdateDetails(
+                req.body.data,
+		res.locals.authData.userId,
+	    );
+
+	    return successResponse(res, 'Successful');
+	} catch (err) {
+            next(err);
+	}
+    }
 
     updatePassword: RequestHandler = async (
         req: IBaseRequest<UpdatePassWordDTO>,
