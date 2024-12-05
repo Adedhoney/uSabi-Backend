@@ -15,6 +15,11 @@ const envs = [
     'SMTP_PORT',
     'SMTP_EMAIL',
     'SMTP_PASSWORD',
+    'TWILIO_SID',
+    'TWILIO_AUTH_TOKEN',
+    'TWILIO_PHONE',
+    'RABBIT_MQ_URL',
+    'OPENAI_API_KEY',
 ];
 
 envs.forEach((value, index) => {
@@ -24,8 +29,8 @@ envs.forEach((value, index) => {
         throw new Error(message);
     }
 });
-
 export default {
+
     ENVIRONMENT: process.env.NODE_ENV,
     PORT: Number(process.env.PORT),
     DATABASE: {
@@ -43,4 +48,14 @@ export default {
         EMAIL: process.env.SMTP_EMAIL as string,
         PASSWORD: process.env.SMTP_PASSWORD as string,
     },
+<<<<<<< HEAD
+=======
+    TWILIO: {
+        SID: process.env.TWILIO_SID as string,
+        AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN as string,
+        PHONE: process.env.TWILIO_PHONE as string,
+    },
+    RABBIT_MQ_URL: process.env.RABBIT_MQ_URL as string,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY as string,
+>>>>>>> f531ed5 (Add `OPENAI_API_KEY` to environment validation and application configuration.)
 };
