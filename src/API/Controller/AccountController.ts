@@ -124,7 +124,7 @@ export class AccountController {
         try {
             await this.service.UpdateDetails(
                 req.body.data,
-		res.locals.authData.userId,
+		res.locals.authData,
 	    );
 
 	    return successResponse(res, 'Successful');
