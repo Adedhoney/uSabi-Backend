@@ -39,8 +39,8 @@ export class FlashcardController {
 	next: NextFunction,
     ) => {
 	try {
-            await this.service.createFlashcard(req.body.data);
-	    successResponse(res, 'Successful');
+            const flashcard = await this.service.createFlashcard(req.body.data);
+	    successResponse(res, 'Flashcard created successfully', { flashcard });
 	} catch (err) {
             next(err);
 	}
@@ -53,7 +53,7 @@ export class FlashcardController {
     ) => {
         try {
             await this.service.updateFlashcard(req.params.flashcardId, req.body.data);
-	    successResponse(res, 'Successful');
+	    successResponse(res, 'Flashcard updated successfully');
 	} catch (err) {
             next(err);
 	}
