@@ -34,11 +34,11 @@ export default (acctctr: AccountController, authentication: RequestHandler) => {
         acctctr.updateInfo,
     );
 
-    router.put(
+    /*router.put(
         '/:userId',
         authentication,
 	acctctr.updateUser,
-    );
+    );*/
 
     router.post(
         '/update-password',
