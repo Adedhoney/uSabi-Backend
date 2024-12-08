@@ -50,6 +50,6 @@ export enum LearningSchedule {
 }
 
 export enum AIAvatarMentor {
-    TECH = "Tobi",
-    DIGITAL = "Mama",
+    TECH = "TechTobi",
+    DIGITAL = "DigitalMama",
 }
