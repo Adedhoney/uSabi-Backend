@@ -1,11 +1,11 @@
-import { Flashcard } from "@domain/Models/Flashcards";
+import { Flashcard, QA } from "@domain/Models/Flashcards";
 import { IDatabase } from "@infrastructure/Database";
 
 export interface IFlashcardRepository {
     readonly db: IDatabase;
     getAllFlashcards(): Promise<Flashcard[]>;
     getFlashcardById(flashcardId: string): Promise<Flashcard>;
-    createFlashcard(flashcard: Flashcard): Promise<Flashcard>;
+    createFlashcard(flashcard: Flashcard): Promise<QA[]>;
     updateFlashcard(flashcardId: string, flashcard: Partial<Flashcard>): Promise<void>;
 }
 
@@ -35,17 +35,18 @@ export class FlashcardRepository implements IFlashcardRepository {
 	} as Flashcard;
     }
 
-    async createFlashcard(data: Flashcard): Promise<Flashcard> {
-        const [flashcard] = await this.db.execute(
+    async createFlashcard(flashcard: Flashcard): Promise<QA[]> {
+        // const [flashcard] = 
+	await this.db.execute(
             `INSERT INTO flashcards (flashcardId, category, title, avatar, qas, difficulty, numberOfQuestions)
 	    VALUES (?,?,?,?,?,?,?)`,
 	    [
-		data.flashcardId, data.category, data.title, data.avatar,
-		JSON.stringify(data.qas), data.difficulty, data.numberOfQuestions
+		flashcard.flashcardId, flashcard.category, flashcard.title, flashcard.avatar,
+		JSON.stringify(flashcard.qas), flashcard.difficulty, flashcard.numberOfQuestions
 	    ]
 	);
-	const flashcardId = (flashcard as any).insertId
-	return { ...data, flashcardId };
+	// const flashcardId = (flashcard as any).insertId
+	return flashcard.qas as QA[];
     }
 
     async updateFlashcard(flashcardId: string, flashcard: Partial<Flashcard>): Promise<void> {
