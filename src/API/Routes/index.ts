@@ -4,7 +4,7 @@ import { Database } from '@infrastructure/Database';
 import { IO } from '@infrastructure/Websocket';
 import { Router } from 'express';
 import { AccountNotification } from 'Handlers/Notification';
-import { AccountService } from 'Service';
+import { AccountService, FlashcardService } from 'Service';
 import { Server } from 'socket.io';
 import { Authentication } from '@api/Middleware';
 import AccountRoutes from './AccountRoutes';
@@ -15,12 +15,16 @@ import { UserService } from 'Service/UserService';
 import { UserFlashcardController } from '@api/Controller/UserFlashcardController';
 import { UserFlashcardService } from 'Service/UserFlashcardService';
 import { UserFlashcardReopository } from '@domain/Repositories/UserFlashcardRepository';
+import FlashcardRoutes from './FlashcardRoutes';
+import { FlashcardController } from '@api/Controller/FlashcardController';
+import { FlashcardRepository } from '@domain/Repositories/FlashcardRepository';
 
 const router = Router();
 
 const database = new Database();
 const acctrepo = new AccountRepository(database);
 const otprepo = new OTPRepository(database);
+const flashcardrepo = new FlashcardRepository(database);
 const userflshcrdrepo = new UserFlashcardReopository(database);
 
 const acctNotification = new AccountNotification();
@@ -30,6 +34,7 @@ const acctctr = new AccountController(
     new AccountService(acctrepo, otprepo, acctNotification),
 );
 const userctr = new UserController(new UserService(acctrepo));
+const flashcardctr = new FlashcardController(new FlashcardService(flashcardrepo));
 const userflshcrdctrl = new UserFlashcardController(
     new UserFlashcardService(userflshcrdrepo)
 );
@@ -40,6 +45,7 @@ const io = new Server();
 
 router.use('/accounts', AccountRoutes(acctctr, Auth));
 router.use('/users', UserRoutes(userctr, Auth));
+router.use('/flashcards', FlashcardRoutes(flashcardctr, Auth));
 router.use('/users/flashcards', UserFlashcardRoutes(userflshcrdctrl, Auth));
 // router.use('/users/courses', )
 
