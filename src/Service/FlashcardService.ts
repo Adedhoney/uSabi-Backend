@@ -1,12 +1,12 @@
 import { generateRandomId } from "@application/utilities";
-import { Flashcard } from "@domain/Models/Flashcards";
+import { Flashcard, QA } from "@domain/Models/Flashcards";
 import { FlashcardRepository } from "@domain/Repositories/FlashcardRepository";
 import { generateFlashcards } from "AI/services/aiFlashcardService";
 
 export interface IFlashcardService {
     getFlashcards(): Promise<Flashcard[]>;
     getFlashcard(flashcardId: string): Promise<Flashcard>;
-    createFlashcard(flashcard: Flashcard): Promise<Flashcard>;
+    createFlashcard(flashcard: Flashcard): Promise<QA[]>;
     updateFlashcard(flashcardId: string, flashcard: Partial<Flashcard>): Promise<void>;
 }
 
@@ -23,7 +23,7 @@ export class FlashcardService implements IFlashcardService {
 	return flashcard;
     }
 
-    async createFlashcard(flashcard: Flashcard): Promise<Flashcard> {
+    async createFlashcard(flashcard: Flashcard): Promise<QA[]> {
 	const flashcardId = generateRandomId();
 	flashcard.flashcardId = flashcardId;
 
