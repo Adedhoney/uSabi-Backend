@@ -7,7 +7,7 @@ export interface Flashcard {
     title: string;
     avatar: AIAvatarMentor;
     qas?: QA[];
-    point: number;
+    point?: number;
     difficulty: DifficultyLevel;
     numberOfQuestions: QuestionSet;
 }
