@@ -5,18 +5,18 @@ export interface IFlashcardRepository {
     readonly db: IDatabase;
     getAllFlashcards(): Promise<Flashcard[]>;
     getFlashcardById(flashcardId: string): Promise<Flashcard>;
-    createFlashcard(flashcard: Flashcard): Promise<void>;
+    createFlashcard(flashcard: Flashcard): Promise<Flashcard>;
     updateFlashcard(flashcardId: string, flashcard: Partial<Flashcard>): Promise<void>;
 }
 
-export class FlashCardRepository implements IFlashcardRepository {
+export class FlashcardRepository implements IFlashcardRepository {
     constructor(readonly db: IDatabase) {}
 
     async getAllFlashcards(): Promise<Flashcard[]> {
         const flashcards = await this.db.execute(
             `SELECT fc.*
             FROM flashcards fc
-	    ORDER BY createdAt DESC`
+	    ORDER BY fc.createdAt DESC`
 	);
 	return flashcards as Flashcard[];
     }
@@ -31,19 +31,21 @@ export class FlashCardRepository implements IFlashcardRepository {
 
 	return {
 		...flashcard,
-		qas: flashcard.qas ? JSON.parse(flashcard[0].qas) : []
+		qas: flashcard.qas ? JSON.parse(flashcard.qas) : []
 	} as Flashcard;
     }
 
-    async createFlashcard(flashcard: Flashcard): Promise<void> {
-        await this.db.execute(
-            `INSERT INTO flashcards (qas, point, difficulty, numberOfQuestions)
-	    VALUES (?,?,?,?)`,
+    async createFlashcard(data: Flashcard): Promise<Flashcard> {
+        const [flashcard] = await this.db.execute(
+            `INSERT INTO flashcards (category, title, avatar, qas, point, difficulty, numberOfQuestions)
+	    VALUES (?,?,?,?,?,?,?) RETURNING *`,
 	    [
-		JSON.stringify(flashcard.qas), flashcard.point,
-		flashcard.difficulty, flashcard.numberOfQuestions
+		data.category, data.title, data.avatar,
+		JSON.stringify(data.qas), data.point,
+		data.difficulty, data.numberOfQuestions
 	    ]
 	);
+	return flashcard;
     }
 
     async updateFlashcard(flashcardId: string, flashcard: Partial<Flashcard>): Promise<void> {
