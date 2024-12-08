@@ -38,7 +38,7 @@ export class FlashcardRepository implements IFlashcardRepository {
     async createFlashcard(data: Flashcard): Promise<Flashcard> {
         const [flashcard] = await this.db.execute(
             `INSERT INTO flashcards (flashcardId, category, title, avatar, qas, difficulty, numberOfQuestions)
-	    VALUES (?,?,?,?,?,?,?,?) RETURNING *`,
+	    VALUES (?,?,?,?,?,?,?) RETURNING *`,
 	    [
 		data.flashcardId, data.category, data.title, data.avatar,
 		JSON.stringify(data.qas), data.difficulty, data.numberOfQuestions
