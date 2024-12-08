@@ -39,8 +39,8 @@ export class FlashcardController {
 	next: NextFunction,
     ) => {
 	try {
-            const flashcard = await this.service.createFlashcard(req.body.data);
-	    successResponse(res, 'Flashcard created successfully', { flashcard });
+            const qas = await this.service.createFlashcard(req.body.data);
+	    successResponse(res, 'Flashcard created successfully', { qas });
 	} catch (err) {
             next(err);
 	}
