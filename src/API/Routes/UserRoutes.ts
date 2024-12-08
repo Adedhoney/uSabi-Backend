@@ -10,15 +10,15 @@ import { RequestHandler, Router } from 'express';
 const router = Router();
 
 export default (userctr: UserController, authentication: RequestHandler) => {
-    router.put(
+    /*router.put(
         '/',
         authentication,
         Validation(UpdateInfoSchema),
         userctr.updateInfo,
-    );
+    );*/
 
     router.put(
-        '/:userId',
+        '/',
         authentication,
 	userctr.updateUser,
     );
