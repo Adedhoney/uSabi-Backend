@@ -64,7 +64,7 @@ export class UserController {
         try {
             await this.service.UpdateDetails(
                 req.body.data,
-		res.locals.authData,
+		req.auth!,
 	    );
 
 	    return successResponse(res, 'Successful');
