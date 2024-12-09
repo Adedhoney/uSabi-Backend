@@ -19,7 +19,7 @@ export class CourseRepository implements ICourseRepository {
 	    VALUES (?,?,?,?,?,?)`
 	    [
 		course.courseId, course.category,
-		course.description ?? null, course.createdAt
+		course.description || null, course.createdAt
 	    ]
 	);
 	return course;
