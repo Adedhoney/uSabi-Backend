@@ -1,3 +1,4 @@
+import { AIAvatarMentor, LearningSchedule, ResponseOption, UserLanguage, UserLearningStyle } from '@domain/Models';
 import Joi from 'joi';
 
 export const SignUpSchema = Joi.object({
@@ -41,4 +42,17 @@ export const CreateMessageSchema = Joi.object({
     messageText: Joi.string().required(),
     messageReference: Joi.string().optional(),
     receiverId: Joi.string().required(),
+});
+
+export const OnboardingSchema = Joi.object({
+    languagePreference: Joi.string()
+        .valid(...Object.values(UserLanguage)).required(),
+    learningStyle: Joi.string()
+        .valid(...Object.values(UserLearningStyle)).required(),
+    aiResponse: Joi.string()
+        .valid(...Object.values(ResponseOption)).required(),
+    learningDuration: Joi.string()
+        .valid(...Object.values(LearningSchedule)).required(),
+    avatar: Joi.string()
+        .valid(...Object.values(AIAvatarMentor)).required(),
 });
