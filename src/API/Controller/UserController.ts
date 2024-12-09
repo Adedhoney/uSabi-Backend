@@ -57,7 +57,7 @@ export class UserController {
     };
 
     updateUser: RequestHandler = async (
-        req: IBaseRequest<Partial<User>>,
+        req: IBaseRequest<Pick<User, 'languagePreference' | 'learningStyle' | 'aiResponse' | 'learningDuration' | 'avatar'>>,
 	res: Response,
 	next: NextFunction,
     ) => {
