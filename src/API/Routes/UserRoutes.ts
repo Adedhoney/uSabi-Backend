@@ -1,6 +1,7 @@
 import { UserController } from '@api/Controller/UserController';
 import { Validation } from 'API/Middleware';
 import {
+    OnboardingSchema,
     ResetPasswordSchema,
     UpdateInfoSchema,
     UpdatePassWordSchema,
@@ -20,6 +21,7 @@ export default (userctr: UserController, authentication: RequestHandler) => {
     router.put(
         '/',
         authentication,
+	Validation(OnboardingSchema),
 	userctr.updateUser,
     );
 
