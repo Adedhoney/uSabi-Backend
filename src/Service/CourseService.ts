@@ -4,7 +4,7 @@ import { Course } from "@domain/Models/Course";
 import { ICourseRepository } from "@domain/Repositories/CourseRepository";
 
 export interface ICourseService {
-    createCourse(course: Course): Promise<Course>;
+    createCourse(course: Omit<Course, 'courseId' | 'createdAt'>): Promise<Course>;
     updateCourse(course: Partial<Course>): Promise<void>;
     fetchAllCourses(): Promise<Course[]>;
     fetchCourse(courseId:  string): Promise<Course>;
