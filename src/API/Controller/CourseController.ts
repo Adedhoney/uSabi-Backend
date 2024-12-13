@@ -8,7 +8,7 @@ export class CourseController {
     constructor(private readonly service: ICourseService) {}
 
     createCourse: RequestHandler = async (
-        req: IBaseRequest<Course>,
+        req: IBaseRequest<Omit<Course, 'courseId' | 'createdAt'>>,
 	res: Response,
 	next: NextFunction
     ) => {
