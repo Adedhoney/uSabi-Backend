@@ -1,5 +1,5 @@
 import { CustomError } from "@application/error";
-import { StatusCode } from "@application/utilities";
+import { generateRandomId, getCurrentTimeStamp, StatusCode } from "@application/utilities";
 import { Course } from "@domain/Models/Course";
 import { ICourseRepository } from "@domain/Repositories/CourseRepository";
 
@@ -16,8 +16,13 @@ export class CourseService implements ICourseService {
         private courseRepo: ICourseRepository,
     ) {}
 
-    async createCourse(course: Course): Promise<Course> {
-        return await this.courseRepo.createCourse(course);
+    async createCourse(course: Omit<Course, 'courseId' | 'createdAt'>): Promise<Course> {
+	const newCourse = {
+	    ...course,
+	    courseId: generateRandomId(),
+	    createdAt: getCurrentTimeStamp(),
+	}
+        return await this.courseRepo.createCourse(newCourse);
     }
 
     async updateCourse(course: Partial<Course>): Promise<void> {
