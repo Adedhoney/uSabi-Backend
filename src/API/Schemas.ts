@@ -56,3 +56,10 @@ export const OnboardingSchema = Joi.object({
     avatar: Joi.string()
         .valid(...Object.values(AIAvatarMentor)).required(),
 });
+
+export const ChapterSchema = Joi.object({
+    courseId: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().optional(),
+    position: Joi.number().required()
+})
