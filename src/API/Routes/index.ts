@@ -26,6 +26,10 @@ import { ChapterRepository } from '@domain/Repositories/ChapterRepository';
 import { ChapterController } from '@api/Controller/ChapterController';
 import { ChapterService } from 'Service/ChapterService';
 import ChapterRoutes from './ChapterRoutes';
+import { VideoRepository } from '@domain/Repositories/VideoRepository';
+import { VideoController } from '@api/Controller/VideoController';
+import { VideoService } from 'Service/VideoService';
+import VideoRoutes from './VideoRoutes';
 
 const router = Router();
 
@@ -34,6 +38,7 @@ const acctrepo = new AccountRepository(database);
 const otprepo = new OTPRepository(database);
 const courserepo = new CourseRepository(database);
 const chapterrepo = new ChapterRepository(database);
+const videoRepo = new VideoRepository(database);
 const flashcardrepo = new FlashcardRepository(database);
 const userflshcrdrepo = new UserFlashcardReopository(database);
 
@@ -46,6 +51,7 @@ const acctctr = new AccountController(
 const userctr = new UserController(new UserService(acctrepo));
 const coursectrl = new CourseController(new CourseService(courserepo));
 const chapterctrl = new ChapterController(new ChapterService(chapterrepo));
+const videoctrl = new VideoController(new VideoService(videoRepo));
 const flashcardctr = new FlashcardController(new FlashcardService(flashcardrepo));
 const userflshcrdctrl = new UserFlashcardController(
     new UserFlashcardService(userflshcrdrepo)
@@ -57,7 +63,8 @@ const io = new Server();
 router.use('/accounts', AccountRoutes(acctctr, Auth));
 router.use('/users', UserRoutes(userctr, Auth));
 router.use('/courses', CourseRoutes(coursectrl, chapterctrl, Auth));
-router.use('/chapters', ChapterRoutes(chapterctrl, Auth));
+router.use('/chapters', ChapterRoutes(chapterctrl, videoctrl, Auth));
+router.use('/videos', VideoRoutes(videoctrl, Auth));
 router.use('/flashcards', FlashcardRoutes(flashcardctr, Auth));
 router.use('/users/flashcards', UserFlashcardRoutes(userflshcrdctrl, Auth));
 // router.use('/users/courses', )
