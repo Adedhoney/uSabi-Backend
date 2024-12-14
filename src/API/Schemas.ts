@@ -62,4 +62,14 @@ export const ChapterSchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().optional(),
     position: Joi.number().required()
-})
+});
+
+export const VideoSchema = Joi.object({
+    chapterId: Joi.string().required(),
+    title: Joi.string().optional(),
+    duration: Joi.number().optional(),
+    englishUrl: Joi.string().optional(),
+    yorubaUrl: Joi.string().optional(),
+    igboUrl: Joi.string().optional(),
+    pidginUrl: Joi.string().optional()
+}).or('englishUrl', 'yorubaUrl', 'igboUrl', 'pidginUrl');
