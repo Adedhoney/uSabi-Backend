@@ -1,9 +1,9 @@
 export interface WaitlistUser {
     userId: string;
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
     email: string;
-    emailVerified: boolean;
+    emailVerified?: boolean;
     createdAt: number;
     updatedAt?: number;
 }
