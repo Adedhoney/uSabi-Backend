@@ -13,7 +13,7 @@ export class WaitlistRepository implements IWaitlistRepository {
 
     async addUser(user: WaitlistUser): Promise<WaitlistUser> {
         await this.db.execute(
-	    `INSERT INTO Waitlist (userId, firstName, lastName, email, emailVerified, createdAt) VALUES (?,?,?,?,?,?)`,
+	    `INSERT INTO waitlist (userId, firstName, lastName, email, emailVerified, createdAt) VALUES (?,?,?,?,?,?)`,
 	    [
 		user.userId, user.firstName || null, user.lastName || null,
 		user.email, user.emailVerified || null, user.createdAt
