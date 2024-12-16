@@ -239,10 +239,11 @@ export class AccountService implements IAccountService {
             verified.status === OTPStatus.USED
         ) {
             throw new CustomError(
-                'Invalid OTP or expired',
+                'Invalid or expired OTP',
                 StatusCode.BAD_REQUEST,
             );
         }
+	await this.otprepo.useOTP(data.email, data.otp);
         await this.acctrepo.verifyEmail(data.email, date);
 
         const token = generateAuthToken(user.userId);
@@ -329,7 +330,7 @@ export class AccountService implements IAccountService {
                 'Invalid OTP or expired',
                 StatusCode.BAD_REQUEST,
             );
-        await this.otprepo.useOTP(data.email, data.otp, date);
+        await this.otprepo.useOTP(data.email, data.otp);
 
         const token = generateOtpToken(data.email);
         return { token };
