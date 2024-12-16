@@ -13,8 +13,8 @@ export const SignUpSchema = Joi.object({
 });
 export const JoinWaitlistSchema = Joi.object({
     email: emailSchema.required(),
-    firstName: nameSchema.required(),
-    lastName: nameSchema.required(),
+    firstName: nameSchema.optional(),
+    lastName: nameSchema.optional(),
 });
 export const LogInSchema = Joi.object({
     email: emailSchema.required(),
