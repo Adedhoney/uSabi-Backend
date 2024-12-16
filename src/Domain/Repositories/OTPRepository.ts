@@ -4,7 +4,7 @@ import { OTP, OTPStatus } from '../Models';
 export interface IOTPRepository {
     saveOTP(otp: OTP): Promise<void>;
     getOTP(email: string, otp: string): Promise<OTP>;
-    useOTP(email: string, otp: string, date: number): Promise<void>;
+    useOTP(email: string, otp: string): Promise<void>;
 }
 
 export class OTPRepository implements IOTPRepository {
@@ -33,9 +33,9 @@ export class OTPRepository implements IOTPRepository {
 
     async useOTP(email: string, otp: string): Promise<void> {
         await this.db.execute(
-            `UPDATE otps SET status = ${OTPStatus.USED}
-     WHERE email = ? AND otp = ?`,
-            [email, otp],
+            `UPDATE otps SET status = ?
+            WHERE email = ? AND otp = ?`,
+            [OTPStatus.USED, email, otp],
         );
     }
 }
