@@ -31,15 +31,15 @@ export class WaitlistService implements IWaitlistService {
 	    emailVerified: false,
 	    createdAt: date,
 	}
-	const otp = generateRandomOTP();
+	/*const otp = generateRandomOTP();
 	await this.otpRepo.saveOTP({
             email: userWaitlist.email,
 	    otp,
 	    expiresAt: date + 1200,
 	    wrongTrials: 0,
 	    status: OTPStatus.UNUSED,
-	});
-	await this.acctNotif.verificationEmail(userWaitlist.email, otp, userWaitlist.firstName);
+	});*/
+	// await this.acctNotif.verificationEmail(userWaitlist.email, otp, userWaitlist.firstName);
         return await this.waitlistRepo.addUser(userWaitlist);
     }
 
