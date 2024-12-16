@@ -30,11 +30,16 @@ import { VideoRepository } from '@domain/Repositories/VideoRepository';
 import { VideoController } from '@api/Controller/VideoController';
 import { VideoService } from 'Service/VideoService';
 import VideoRoutes from './VideoRoutes';
+import WaitlistRoutes from './WaitlistRoutes';
+import { WaitlistRepository } from '@domain/Repositories/WaitlistRepository';
+import { WaitlistController } from '@api/Controller/WaitlistController';
+import { WaitlistService } from 'Service/WaitlistService';
 
 const router = Router();
 
 const database = new Database();
 const acctrepo = new AccountRepository(database);
+const waitlistrepo = new WaitlistRepository(database);
 const otprepo = new OTPRepository(database);
 const courserepo = new CourseRepository(database);
 const chapterrepo = new ChapterRepository(database);
@@ -48,6 +53,7 @@ const Auth = Authentication(acctrepo);
 const acctctr = new AccountController(
     new AccountService(acctrepo, otprepo, acctNotification),
 );
+const waitlistctr = new WaitlistController(new WaitlistService(waitlistrepo, otprepo, acctNotification));
 const userctr = new UserController(new UserService(acctrepo));
 const coursectrl = new CourseController(new CourseService(courserepo));
 const chapterctrl = new ChapterController(new ChapterService(chapterrepo));
@@ -62,6 +68,7 @@ const io = new Server();
 
 router.use('/accounts', AccountRoutes(acctctr, Auth));
 router.use('/users', UserRoutes(userctr, Auth));
+router.use('/waitlist', WaitlistRoutes(waitlistctr));
 router.use('/courses', CourseRoutes(coursectrl, chapterctrl, Auth));
 router.use('/chapters', ChapterRoutes(chapterctrl, videoctrl, Auth));
 router.use('/videos', VideoRoutes(videoctrl, Auth));
