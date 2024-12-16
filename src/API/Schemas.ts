@@ -1,15 +1,24 @@
 import { AIAvatarMentor, LearningSchedule, ResponseOption, UserLanguage, UserLearningStyle } from '@domain/Models';
 import Joi from 'joi';
 
+const emailSchema = Joi.string().email().required();
+const nameSchema = Joi.string().min(1).max(50);
+const passwordSchema = Joi.string().min(8);
+
 export const SignUpSchema = Joi.object({
-    email: Joi.string().required(),
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    password: Joi.string().required(),
+    email: emailSchema,
+    firstName: nameSchema.required(),
+    lastName: nameSchema.required(),
+    password: Joi.string().min(8).required(),
+});
+export const JoinWaitlistSchema = Joi.object({
+    email: emailSchema.required(),
+    firstName: nameSchema.required(),
+    lastName: nameSchema.required(),
 });
 export const LogInSchema = Joi.object({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
+    email: emailSchema.required(),
+    password: passwordSchema.required(),
 });
 
 export const GoogleSignInSchema = Joi.object({
@@ -17,23 +26,23 @@ export const GoogleSignInSchema = Joi.object({
 });
 
 export const UpdateInfoSchema = Joi.object({
-    firstName: Joi.string().optional(),
-    lastName: Joi.string().optional(),
+    firstName: nameSchema.optional(),
+    lastName: nameSchema.optional(),
 });
 export const CreatorUpdateInfoSchema = Joi.object({
-    firstName: Joi.string().optional(),
-    lastName: Joi.string().optional(),
+    firstName: nameSchema.optional(),
+    lastName: nameSchema.optional(),
 });
 export const UpdatePassWordSchema = Joi.object({
-    password: Joi.string().required(),
+    password: passwordSchema.required(),
 });
 export const VerifyOtpSchema = Joi.object({
-    email: Joi.string().required(),
+    email: emailSchema.required(),
     otp: Joi.string().required(),
 });
 export const ResetPasswordSchema = Joi.object({
     otpToken: Joi.string().required(),
-    newPassword: Joi.string().required(),
+    newPassword: passwordSchema.required(),
 });
 export const SavePostSchema = Joi.object({
     post: Joi.string().required(),
