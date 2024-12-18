@@ -3,6 +3,7 @@ import { IDatabase } from '@infrastructure/Database';
 
 export interface ICourseRepository {
     readonly db: IDatabase;
+    getCourseWithDetailsById(courseId: string): Promise<any[]>;
     createCourse(course: Course): Promise<Course>;
     updateCourse(course: Partial<Course>): Promise<void>
     getAllCourses(): Promise<Course[]>;
@@ -12,6 +13,23 @@ export interface ICourseRepository {
 
 export class CourseRepository implements ICourseRepository {
     constructor(readonly db: IDatabase) {}
+
+    async getCourseWithDetailsById(courseId: string): Promise<any[]> {
+        const query = `
+            SELECT
+                c.*,
+                ch.*,
+                v.*,
+                q.*
+            FROM Courses c
+            LEFT JOIN Chapters ch ON c.courseId = ch.courseId
+            LEFT JOIN Videos v ON ch.chapterId = v.chapterId
+            LEFT JOIN Quizzes q ON ch.chapterId = q.chapterId
+            WHERE c.courseId = ?;
+        `;
+        const [rows] = await this.db.execute(query, [courseId]);
+        return rows;
+    }
 
     async createCourse(course: Course): Promise<Course> {
 	await this.db.execute(
@@ -45,13 +63,13 @@ export class CourseRepository implements ICourseRepository {
         const [course] = await this.db.execute(
             `SELECT c.*
 	    FROM courses as c
-	    WHERE c.id=?`,
+	    WHERE c.courseId=?`,
 	    [courseId],
 	);
 	return course as Course;
     }
 
-    async updateCourse(course: Partial<Course>): Promise<void> {	
+    async updateCourse(course: Partial<Course>): Promise<void> {
 	const keys = Object.keys(course);
 	const values = Object.values(course);
 
