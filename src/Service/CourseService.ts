@@ -4,6 +4,7 @@ import { Course } from "@domain/Models/Course";
 import { ICourseRepository } from "@domain/Repositories/CourseRepository";
 
 export interface ICourseService {
+    getCourseFullDetails(courseId: string): Promise<any[]>;
     createCourse(course: Omit<Course, 'courseId' | 'createdAt'>): Promise<Course>;
     updateCourse(course: Partial<Course>): Promise<void>;
     fetchAllCourses(): Promise<Course[]>;
@@ -15,6 +16,11 @@ export class CourseService implements ICourseService {
     constructor(
         private courseRepo: ICourseRepository,
     ) {}
+
+    async getCourseFullDetails(courseId: string): Promise<any[]> {
+        const rows = await this.courseRepo.getCourseWithDetailsById(courseId);
+	return rows; //transformResult(rows);
+    }
 
     async createCourse(course: Omit<Course, 'courseId' | 'createdAt'>): Promise<Course> {
 	const newCourse = {
