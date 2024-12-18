@@ -7,6 +7,21 @@ import { Response, RequestHandler, NextFunction } from "express";
 export class CourseController {
     constructor(private readonly service: ICourseService) {}
 
+    getCourseDetails: RequestHandler = async(
+        req: RequestWithAuth,
+	res: Response,
+	next: NextFunction
+    ) => {
+        try {
+	    const courseDetails = await this.service.getCourseFullDetails(
+		req.params.courseId
+	    );
+	    successResponse(res, 'Course details retrieved successfully', { courseDetails });
+	} catch (err) {
+            next(err);
+	}
+    }
+
     createCourse: RequestHandler = async (
         req: IBaseRequest<Omit<Course, 'courseId' | 'createdAt'>>,
 	res: Response,
