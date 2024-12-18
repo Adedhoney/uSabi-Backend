@@ -15,5 +15,7 @@ export default (
     router.delete('/:courseId', authentication, courseController.deleteCourse);
     router.get('/:courseId/chapters', authentication, chapterController.fetchChapter);
 
+    router.get('/:courseId/full-details', authentication, courseController.getCourseDetails);
+
     return router;
 };
