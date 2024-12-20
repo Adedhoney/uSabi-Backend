@@ -5,6 +5,7 @@ import {
     TokenExpiredError,
 } from '@application/error';
 import { StatusCode, verifyAuthToken } from '@application/utilities';
+import { Permission } from '@domain/Models';
 import { IAccountRepository } from '@domain/Repositories';
 
 import { NextFunction, Request, Response } from 'express';
@@ -40,3 +41,12 @@ export const Authentication =
             return next(new TokenExpiredError());
         }
     };
+
+    export const AdminAuthentication = () => async (
+        req: RequestWithAuth, _: Response, next: NextFunction
+    ) => {
+	if (req.auth && req.auth.permission === Permission.ADMIN) {
+            next();
+	}
+	return next(new CustomError('Unauthorized', StatusCode.UNAUTHORIZED),);
+    }
