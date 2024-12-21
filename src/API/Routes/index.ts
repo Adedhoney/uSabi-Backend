@@ -6,7 +6,7 @@ import { Router } from 'express';
 import { AccountNotification } from 'Handlers/Notification';
 import { AccountService, FlashcardService } from 'Service';
 import { Server } from 'socket.io';
-import { Authentication } from '@api/Middleware';
+import { AdminAuthentication, Authentication } from '@api/Middleware';
 import AccountRoutes from './AccountRoutes';
 import UserRoutes from './UserRoutes';
 import { UserController } from '@api/Controller/UserController';
@@ -34,6 +34,11 @@ import WaitlistRoutes from './WaitlistRoutes';
 import { WaitlistRepository } from '@domain/Repositories/WaitlistRepository';
 import { WaitlistController } from '@api/Controller/WaitlistController';
 import { WaitlistService } from 'Service/WaitlistService';
+import { QuizRepository } from '@domain/Repositories/QuizRepository';
+import { QuizController } from '@api/Controller/QuizController';
+import { QuizService } from 'Service/QuizService';
+import QuizRoutes from './QuizRoutes';
+import AdminRoutes from './AdminRoutes';
 
 const router = Router();
 
@@ -44,12 +49,15 @@ const otprepo = new OTPRepository(database);
 const courserepo = new CourseRepository(database);
 const chapterrepo = new ChapterRepository(database);
 const videoRepo = new VideoRepository(database);
+const quizrepo = new QuizRepository(database);
 const flashcardrepo = new FlashcardRepository(database);
 const userflshcrdrepo = new UserFlashcardReopository(database);
 
 const acctNotification = new AccountNotification();
 
 const Auth = Authentication(acctrepo);
+const AdminAuth = AdminAuthentication();
+
 const acctctr = new AccountController(
     new AccountService(acctrepo, otprepo, acctNotification),
 );
@@ -58,6 +66,7 @@ const userctr = new UserController(new UserService(acctrepo));
 const coursectrl = new CourseController(new CourseService(courserepo));
 const chapterctrl = new ChapterController(new ChapterService(chapterrepo));
 const videoctrl = new VideoController(new VideoService(videoRepo));
+const quizctrl = new QuizController(new QuizService(quizrepo, chapterrepo, courserepo, acctrepo));
 const flashcardctr = new FlashcardController(new FlashcardService(flashcardrepo));
 const userflshcrdctrl = new UserFlashcardController(
     new UserFlashcardService(userflshcrdrepo)
@@ -70,10 +79,12 @@ router.use('/accounts', AccountRoutes(acctctr, Auth));
 router.use('/users', UserRoutes(userctr, Auth));
 router.use('/waitlist', WaitlistRoutes(waitlistctr));
 router.use('/courses', CourseRoutes(coursectrl, chapterctrl, Auth));
-router.use('/chapters', ChapterRoutes(chapterctrl, videoctrl, Auth));
-router.use('/videos', VideoRoutes(videoctrl, Auth));
+// router.use('/chapters', ChapterRoutes(chapterctrl, videoctrl, Auth));
+// router.use('/videos', VideoRoutes(videoctrl, Auth));
+// router.use('/quiz', QuizRoutes(quizctrl, Auth));
 router.use('/flashcards', FlashcardRoutes(flashcardctr, Auth));
-router.use('/users/flashcards', UserFlashcardRoutes(userflshcrdctrl, Auth));
+// router.use('/users/flashcards', UserFlashcardRoutes(userflshcrdctrl, Auth));
 // router.use('/users/courses', )
+router.use('/admin', AdminRoutes(coursectrl, chapterctrl, videoctrl, quizctrl, Auth, AdminAuth))
 
 export { router, io };
