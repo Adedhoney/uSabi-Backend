@@ -1,15 +1,12 @@
 import { ChapterController } from "@api/Controller/ChapterController";
 import { CourseController } from "@api/Controller/CourseController";
-import { UserController } from "@api/Controller/UserController";
-import { UserCourseController } from "@api/Controller/UserCourseController";
 import { RequestHandler, Router } from "express";
 
 const router = Router();
 
 export default (
     courseController: CourseController, chapterController: ChapterController,
-    userCourseController: UserCourseController, authentication: RequestHandler,
-    adminAuthentication?: RequestHandler
+    authentication: RequestHandler, adminAuthentication?: RequestHandler
 ) => {
     if (adminAuthentication) {
 	router.post('/', authentication, adminAuthentication, courseController.createCourse);
