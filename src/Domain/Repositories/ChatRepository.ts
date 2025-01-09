@@ -3,7 +3,7 @@ import { IDatabase } from "@infrastructure/Database";
 
 export interface IChatRepository {
     saveUserMessage(chat: Chat): Promise<void>;
-    getUserConversations(userId: string, limit: number): Promise<Chat[]>;
+    getUserConversations(userId: string, limit: string): Promise<Chat[]>;
 }
 
 export class ChatRepository implements IChatRepository {
@@ -20,14 +20,14 @@ export class ChatRepository implements IChatRepository {
 	);
     }
 
-    async getUserConversations(userId: string, limit: number = 999999): Promise<Chat[]> {
+    async getUserConversations(userId: string, limit: string = "999999"): Promise<Chat[]> {
 	const conversations = await this.db.execute(
 	    `SELECT *
 	    FROM chat
 	    WHERE userId=?
 	    ORDER BY createdAt ASC
 	    LIMIT ?`,
-	    [userId, limit.toString()]
+	    [userId, limit]
 	);
 	return conversations as Chat[];
     }
