@@ -5,10 +5,10 @@ import { RequestHandler, Router } from "express";
 
 const router = Router();
 
-export default (videoController: VideoController, authentication: RequestHandler) => {
-    router.post('/', authentication, Validation(VideoSchema), videoController.uploadVideo);
-    router.put('/:videoId', authentication, videoController.updateUploadedVideo);
-    router.delete('/:videoId', authentication, videoController.deleteVideo);
+export default (videoController: VideoController, authentication: RequestHandler, adminAuthentication: RequestHandler) => {
+    router.post('/', authentication, adminAuthentication, Validation(VideoSchema), videoController.uploadVideo);
+    router.put('/:videoId', authentication, adminAuthentication, videoController.updateUploadedVideo);
+    router.delete('/:videoId', authentication, adminAuthentication, videoController.deleteVideo);
 
     return router;
 }
