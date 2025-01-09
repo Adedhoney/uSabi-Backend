@@ -27,7 +27,7 @@ export class ChatRepository implements IChatRepository {
 	    WHERE userId=?
 	    ORDER BY createdAt ASC
 	    LIMIT ?`,
-	    [userId, limit]
+	    [userId, limit.toString()]
 	);
 	return conversations as Chat[];
     }
