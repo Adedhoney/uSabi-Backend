@@ -14,7 +14,7 @@ export class QuizController {
     ) => {
         try {
 	    const quiz = await this.service.addQuiz(
-		req.body.data, req.auth!.userId, Number(req.params.numberOfQuestions)
+		req.body.data, Number(req.params.numberOfQuestions)
 	    );
 	    successResponse(res, 'Quiz created successfully', { quiz });
 	} catch (err) {
