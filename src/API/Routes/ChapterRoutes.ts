@@ -7,12 +7,12 @@ const router = Router();
 
 export default (
     chapterController: ChapterController, videoController: VideoController,
-    authentication: RequestHandler
+    authentication: RequestHandler, adminAuthentication: RequestHandler
 ) => {
-    router.post('/', authentication, chapterController.createChapter);
-    router.get('/:chapterId/', authentication, chapterController.fetchChapter);
-    router.put('/:chapterId/', chapterController.updateChapter);
-    router.get('/:chapterId/video', videoController.getVideo);
+    router.post('/', authentication, adminAuthentication, chapterController.createChapter);
+    router.get('/:chapterId/', authentication, adminAuthentication, chapterController.fetchChapter);
+    router.put('/:chapterId/', adminAuthentication, chapterController.updateChapter);
+    router.get('/:chapterId/video', adminAuthentication, videoController.getVideo);
 
     return router;
 }
