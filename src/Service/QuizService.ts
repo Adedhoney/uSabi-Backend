@@ -8,8 +8,7 @@ import { generateQuiz } from "AI/services/aiQuizService";
 
 export interface IQuizService {
     addQuiz(
-	quiz: Omit<Quiz, 'qId' | 'qas' | 'createdAt'>,
-	userId: string, numberOfQuestions: number
+	quiz: Omit<Quiz, 'qId' | 'qas' | 'createdAt'>, numberOfQuestions: number
     ): Promise<Quiz>;
     // addQuestion(quiz: Partial<Quiz>): Promise<void>;
     fetchQuiz(chapterId: string): Promise<Quiz>;
@@ -23,15 +22,13 @@ export class QuizService implements IQuizService {
     ) {}
 
     async addQuiz(
-	quiz: Omit<Quiz, 'qId' | 'qas' | 'createdAt'>,
-	userId: string, numberOfQuestions: number
+	quiz: Omit<Quiz, 'qId' | 'qas' | 'createdAt'>, numberOfQuestions: number 
     ): Promise<Quiz> {
-	const user = await this.userRepo.getUserById(userId);
 	const chapter = await this.chapterRepo.getChapterById(quiz.chapterId);
 	const course = await this.courseRepo.getCourseById(chapter.courseId);
 	const quizQA = await generateQuiz(
 	    course.category, course.topic, chapter.title,
-	    numberOfQuestions, user.avatar!, chapter.description
+	    numberOfQuestions, course.avatar, chapter.description
 	);
 	const newQuiz = {
             ...quiz,
