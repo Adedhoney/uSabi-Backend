@@ -21,7 +21,7 @@ export class CourseRepository implements ICourseRepository {
                 ch.*,
                 v.*,
                 q.*
-            FROM Courses c
+            FROM courses c
             LEFT JOIN Chapters ch ON c.courseId = ch.courseId
             LEFT JOIN Videos v ON ch.chapterId = v.chapterId
             LEFT JOIN Quizzes q ON ch.chapterId = q.chapterId
@@ -29,6 +29,18 @@ export class CourseRepository implements ICourseRepository {
         `;
         const [rows] = await this.db.execute(query, [courseId]);
         return rows;
+    }
+
+    async getCourses(): Promise<Partial<Course>[]> {
+        const query = `
+            SELECT
+	        c.courseId,
+		c.topic,
+		c.description
+            FROM courses c
+	`;
+	const rows = await this.db.execute(query);
+	return rows as Partial<Course>[];
     }
 
     async createCourse(course: Course): Promise<Course> {
