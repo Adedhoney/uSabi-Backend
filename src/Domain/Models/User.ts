@@ -4,7 +4,7 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
-    permission: Permission,
+    permission?: Permission,
     status: UserAccountStatus;
     password?: string;
     emailVerified: boolean;
@@ -16,7 +16,7 @@ export interface User {
     learningStyle?: UserLearningStyle;
     aiResponse?: ResponseOption;
     learningDuration?: LearningSchedule;
-    avatar: AIAvatarMentor;
+    avatar?: AIAvatarMentor;
 }
 
 export enum Permission {
