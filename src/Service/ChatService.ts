@@ -5,7 +5,7 @@ import { generateChatResponse } from "AI/services/aiChatService";
 
 export interface IChatService {
     getResponse(userMessage: string, userId: string): Promise<string>;
-    getConversationHistory(userId: string, limit: number): Promise<Chat[]>;
+    getConversationHistory(userId: string, limit: string): Promise<Chat[]>;
 }
 
 export class ChatService implements IChatService {
@@ -27,8 +27,7 @@ export class ChatService implements IChatService {
 	await this.chatRepo.saveUserMessage(chat);
     }
 
-    async getConversationHistory(userId: string, limit: number): Promise<Chat[]> {
-        const chatConversations = await this.chatRepo.getUserConversations(userId, limit);
-	return chatConversations;
+    async getConversationHistory(userId: string, limit: string): Promise<Chat[]> {
+        return await this.chatRepo.getUserConversations(userId, limit);
     }
 }
