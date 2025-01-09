@@ -1,4 +1,4 @@
-import { IBaseRequest } from "@api/Utilities/Request";
+import { IBaseRequest, RequestWithAuth } from "@api/Utilities/Request";
 import { successResponse } from "@api/Utilities/Response";
 import { NextFunction, RequestHandler, Response } from "express";
 import { IChatService } from "Service/ChatService";
@@ -17,6 +17,19 @@ export class ChatController {
 	    successResponse(
 		res, 'AI response retrieved and conversation recorded successfully', { aiResponse }
 	    );
+	} catch (err) {
+            next(err);
+	}
+    }
+
+    getChatHistory: RequestHandler = async (
+        req: RequestWithAuth,
+	res: Response,
+	next: NextFunction
+    ) => {
+        try {
+	    const chats = await this.service.getConversationHistory(req.auth!.userId, Number(req.query.limit));
+	    successResponse(res, 'Chat history is retrieved successfully', { chats });
 	} catch (err) {
             next(err);
 	}
