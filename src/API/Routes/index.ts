@@ -39,6 +39,9 @@ import { QuizController } from '@api/Controller/QuizController';
 import { QuizService } from 'Service/QuizService';
 import QuizRoutes from './QuizRoutes';
 import AdminRoutes from './AdminRoutes';
+import { UserCourseRepository } from '@domain/Repositories/UserCourseRepository';
+import { UserCourseController } from '@api/Controller/UserCourseController';
+import { UserCourseService } from 'Service/UserCourseService';
 
 const router = Router();
 
@@ -47,6 +50,7 @@ const acctrepo = new AccountRepository(database);
 const waitlistrepo = new WaitlistRepository(database);
 const otprepo = new OTPRepository(database);
 const courserepo = new CourseRepository(database);
+const usercourserepo = new UserCourseRepository(database);
 const chapterrepo = new ChapterRepository(database);
 const videoRepo = new VideoRepository(database);
 const quizrepo = new QuizRepository(database);
@@ -64,19 +68,20 @@ const acctctr = new AccountController(
 const waitlistctr = new WaitlistController(new WaitlistService(waitlistrepo, otprepo, acctNotification));
 const userctr = new UserController(new UserService(acctrepo));
 const coursectrl = new CourseController(new CourseService(courserepo));
+const usercoursectrl = new UserCourseController(new UserCourseService(usercourserepo));
 const chapterctrl = new ChapterController(new ChapterService(chapterrepo));
 const videoctrl = new VideoController(new VideoService(videoRepo));
 const quizctrl = new QuizController(new QuizService(quizrepo, chapterrepo, courserepo, acctrepo));
 const flashcardctr = new FlashcardController(new FlashcardService(flashcardrepo));
-const userflshcrdctrl = new UserFlashcardController(
+/* const userflshcrdctrl = new UserFlashcardController(
     new UserFlashcardService(userflshcrdrepo)
-);
+);*/
 
 const io = new Server();
 // const io_obj = new IO(io);
 
 router.use('/accounts', AccountRoutes(acctctr, Auth));
-router.use('/users', UserRoutes(userctr, Auth));
+router.use('/users', UserRoutes(userctr, usercoursectrl, Auth));
 router.use('/waitlist', WaitlistRoutes(waitlistctr));
 router.use('/courses', CourseRoutes(coursectrl, chapterctrl, Auth));
 // router.use('/chapters', ChapterRoutes(chapterctrl, videoctrl, Auth));
