@@ -45,11 +45,11 @@ export class CourseRepository implements ICourseRepository {
 
     async createCourse(course: Course): Promise<Course> {
 	await this.db.execute(
-            `INSERT INTO courses (courseId, category, topic, description, createdAt)
-	    VALUES (?,?,?,?,?)`
+            `INSERT INTO courses (courseId, category, topic, description, avatar, createdAt)
+	    VALUES (?,?,?,?,?,?)`
 	    [
 		course.courseId, course.category, course.topic,
-		course.description || null, course.createdAt
+		course.description || null, course.avatar, course.createdAt
 	    ]
 	);
 	return course;
