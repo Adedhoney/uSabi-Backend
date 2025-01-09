@@ -22,9 +22,9 @@ export class CourseRepository implements ICourseRepository {
                 v.*,
                 q.*
             FROM courses c
-            LEFT JOIN Chapters ch ON c.courseId = ch.courseId
-            LEFT JOIN Videos v ON ch.chapterId = v.chapterId
-            LEFT JOIN Quizzes q ON ch.chapterId = q.chapterId
+            LEFT JOIN chapters ch ON c.courseId = ch.courseId
+            LEFT JOIN videos v ON ch.chapterId = v.chapterId
+            LEFT JOIN quiz q ON ch.chapterId = q.chapterId
             WHERE c.courseId = ?;
         `;
         const [rows] = await this.db.execute(query, [courseId]);
