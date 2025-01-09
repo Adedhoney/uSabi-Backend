@@ -42,6 +42,10 @@ import AdminRoutes from './AdminRoutes';
 import { UserCourseRepository } from '@domain/Repositories/UserCourseRepository';
 import { UserCourseController } from '@api/Controller/UserCourseController';
 import { UserCourseService } from 'Service/UserCourseService';
+import { ChatController } from '@api/Controller/ChatController';
+import { ChatService } from 'Service/ChatService';
+import { ChatRepository } from '@domain/Repositories/ChatRepository';
+import ChatRoutes from './ChatRoutes';
 
 const router = Router();
 
@@ -55,7 +59,8 @@ const chapterrepo = new ChapterRepository(database);
 const videoRepo = new VideoRepository(database);
 const quizrepo = new QuizRepository(database);
 const flashcardrepo = new FlashcardRepository(database);
-const userflshcrdrepo = new UserFlashcardReopository(database);
+// const userflshcrdrepo = new UserFlashcardReopository(database);
+const chatRepo = new ChatRepository(database);
 
 const acctNotification = new AccountNotification();
 
@@ -76,6 +81,7 @@ const flashcardctr = new FlashcardController(new FlashcardService(flashcardrepo)
 /* const userflshcrdctrl = new UserFlashcardController(
     new UserFlashcardService(userflshcrdrepo)
 );*/
+const chatCtrl = new ChatController(new ChatService(chatRepo));
 
 const io = new Server();
 // const io_obj = new IO(io);
@@ -91,5 +97,6 @@ router.use('/flashcards', FlashcardRoutes(flashcardctr, Auth));
 // router.use('/users/flashcards', UserFlashcardRoutes(userflshcrdctrl, Auth));
 // router.use('/users/courses', )
 router.use('/admin', AdminRoutes(coursectrl, chapterctrl, videoctrl, quizctrl, Auth, AdminAuth))
+router.use('/chat', ChatRoutes(chatCtrl, Auth));
 
 export { router, io };
