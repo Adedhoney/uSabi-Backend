@@ -1,9 +1,13 @@
 export interface Quiz {
     qId: string;
     chapterId: string;
-    question: string;
-    options: string[];
-    correctAnswer: string;
-    createdAt: string;
-    updatedAt?: string;
+    qas: QuizQA[];
+    createdAt: number;
+    updatedAt?: number;
+}
+
+export interface QuizQA {
+    question: string,
+    options: string[],
+    correctAnswer: string
 }
