@@ -9,7 +9,7 @@ export const generateChatResponse = async (
     
     const messages = [
 	{ role: "system", content: systemMessage },
-	...conversationContext.reduce((acc: any[], entry: Chat) => {
+        ...conversationContext.reduce((acc: any[], entry: Chat) => {
             acc.push({ role: "user", content: entry.userMessage });
 	    acc.push({ role: "assistant", content: entry.aiResponse });
 	    return acc;
