@@ -28,7 +28,7 @@ export class ChatController {
 	next: NextFunction
     ) => {
         try {
-	    const chats = await this.service.getConversationHistory(req.auth!.userId, Number(req.query.limit));
+	    const chats = await this.service.getConversationHistory(req.auth!.userId, req.query.limit as string);
 	    successResponse(res, 'Chat history is retrieved successfully', { chats });
 	} catch (err) {
             next(err);
