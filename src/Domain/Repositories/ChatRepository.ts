@@ -16,14 +16,14 @@ export class ChatRepository implements IChatRepository {
 	    [
 		chat.chatId, chat.userId,
 		chat.userMessage, chat.aiResponse, chat.createdAt
-]
+	    ]
 	);
     }
 
     async getUserConversations(userId: string, limit: number = 999999): Promise<Chat[]> {
-        const conversations = await this.db.execute(
-	    `SELECT ct.*
-	    FROM chat ct
+	const conversations = await this.db.execute(
+	    `SELECT *
+	    FROM chat
 	    WHERE userId=?
 	    ORDER BY createdAt ASC
 	    LIMIT ?`,
