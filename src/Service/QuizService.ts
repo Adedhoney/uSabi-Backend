@@ -31,7 +31,7 @@ export class QuizService implements IQuizService {
 	const course = await this.courseRepo.getCourseById(chapter.courseId);
 	const quizQA = await generateQuiz(
 	    course.category, course.topic, chapter.title,
-	    numberOfQuestions, user.avatar, chapter.description
+	    numberOfQuestions, user.avatar!, chapter.description
 	);
 	const newQuiz = {
             ...quiz,
