@@ -45,7 +45,7 @@ export class UserCourseRepository implements IUserCourseRepository {
 
     async isUserEnrolled(userId: string, courseId: string): Promise<boolean> {
         const [result] = await this.db.execute(
-	    `SELCT COUNT(*) as count
+	    `SELECT COUNT(*) as count
 	    FROM user_courses
 	    WHERE userId=? AND courseId=?`,
 	    [userId, courseId]
