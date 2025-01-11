@@ -1,5 +1,7 @@
+import { CustomError } from "@application/error";
 import { getCurrentTimeStamp } from "@application/utilities";
 import { UserCourse } from "@domain/Models/UserCourse";
+import { CourseRepository } from "@domain/Repositories/CourseRepository";
 import { IUserCourseRepository } from "@domain/Repositories/UserCourseRepository";
 
 export interface IUserCourseService {
@@ -11,6 +13,7 @@ export interface IUserCourseService {
 
 export class UserCourseService implements IUserCourseService {
     constructor(
+	private courseRepo: CourseRepository,
 	private userCourseRepo: IUserCourseRepository
     ) {}
 
@@ -30,6 +33,10 @@ export class UserCourseService implements IUserCourseService {
     }
 
     async isUserEnrolled(userId: string, courseId: string): Promise<boolean> {
+	const course = await this.courseRepo.getCourseById(courseId);
+	if (!courseId && course) {
+            throw new CustomError('Enter a valid courseId');
+	}
         return await this.userCourseRepo.isUserEnrolled(userId, courseId);
     }
 
