@@ -18,8 +18,17 @@ export class CourseService implements ICourseService {
     ) {}
 
     async getCourseFullDetails(courseId: string): Promise<any[]> {
-        const rows = await this.courseRepo.getCourseWithDetailsById(courseId);
-	return rows; //transformResult(rows);
+	if (!courseId) {
+	    throw new CustomError('courseId is required');
+	}
+
+	const course = await this.courseRepo.getCourseById(courseId);
+	if (!course) {
+            throw new CustomError('Invalid courseId, course not found', StatusCode.NOT_FOUND);
+	}
+
+        return await this.courseRepo.getCourseWithDetailsById(courseId);
+	// return rows; //transformResult(rows);
     }
 
     async createCourse(course: Omit<Course, 'courseId' | 'createdAt'>): Promise<Course> {
