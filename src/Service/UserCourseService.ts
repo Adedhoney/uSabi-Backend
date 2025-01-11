@@ -1,5 +1,5 @@
 import { CustomError } from "@application/error";
-import { getCurrentTimeStamp } from "@application/utilities";
+import { getCurrentTimeStamp, StatusCode } from "@application/utilities";
 import { UserCourse } from "@domain/Models/UserCourse";
 import { CourseRepository } from "@domain/Repositories/CourseRepository";
 import { IUserCourseRepository } from "@domain/Repositories/UserCourseRepository";
@@ -33,10 +33,15 @@ export class UserCourseService implements IUserCourseService {
     }
 
     async isUserEnrolled(userId: string, courseId: string): Promise<boolean> {
-	const course = await this.courseRepo.getCourseById(courseId);
-	if (!courseId && course) {
-            throw new CustomError('Enter a valid courseId');
+	if (!courseId) {
+	    throw new CustomError('courseId is required');
 	}
+
+	const course = await this.courseRepo.getCourseById(courseId);
+	if (!course) {
+            throw new CustomError('Invalid courseId, course not found', StatusCode.NOT_FOUND);
+	}
+
         return await this.userCourseRepo.isUserEnrolled(userId, courseId);
     }
 
